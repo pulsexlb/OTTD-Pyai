@@ -10,7 +10,12 @@ class OtherAIGS extends GSController
   
   function _OnSendAdminMessage(message, self)
   {
-    GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + message.GetStringData(1));
+    GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + message.GetData(1));
+    local data = {
+        companyId = message.GetIntData(0)
+        msg = message.GetData(1)
+    }
+    GSAdmin.Send(data)
   }
 
   _scp = null;
