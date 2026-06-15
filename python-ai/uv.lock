@@ -3,63 +3,15 @@ revision = 3
 requires-python = ">=3.14"
 
 [[package]]
-name = "pymonocypher"
-version = "4.0.2.8"
-source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/44/f2/621ee4a3042f3b0490fc2f8664cea115b6417643016bf9ab742b98de0d7a/pymonocypher-4.0.2.8.tar.gz", hash = "sha256:0f5bd73568ebff6301de328412855715e38937d63672021aa61185c1b02f3389", size = 456903, upload-time = "2026-06-01T21:01:37.931Z" }
-wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/65/fe/de78010b65e2e26b5219e8f71fe8a41d4e02bace608fbe726bdc98d0378e/pymonocypher-4.0.2.8-cp314-cp314-macosx_10_15_universal2.whl", hash = "sha256:ca243430bee0eba0790278229cc86c08afbd46f4779d894cb5b27ebd666ff70c", size = 199335, upload-time = "2026-06-01T21:01:32.029Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/27/d0/b5c702d454666ea97d45f33d4b556e0df65e06fba7d8107f2d0bc4ba8503/pymonocypher-4.0.2.8-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:ebb034df483bffec2dbde4a4c3568de8945a86dc690372aaf7a93e10fc7b9b62", size = 485003, upload-time = "2026-06-01T21:01:33.186Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/76/dd/49038754ff5c676ee02514758df595f918a6adf29fe192442157d2a94aa3/pymonocypher-4.0.2.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:171390360a11c6ad8f5ac9a5cc457d8efb3fdc7337dde6c1fbcb8b5ed066b732", size = 495037, upload-time = "2026-06-01T21:01:34.579Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/36/f6/27f6242242e436cadd668dad0f8c82eac6cb2519b50ec4882d5f414cbe40/pymonocypher-4.0.2.8-cp314-cp314-win_amd64.whl", hash = "sha256:ddb5b2ccdc82484e8014f7601b2c0fec431712c3382f22ce1bffb831a6030961", size = 92533, upload-time = "2026-06-01T21:01:36.33Z" },
-]
-
-[[package]]
-name = "pyopenttdadmin"
-version = "1.1.0"
-source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/94/bf/710a248f90d317738cb9c7e483c1966284c6aad4dde44f152f0a82e454fa/pyopenttdadmin-1.1.0.tar.gz", hash = "sha256:e678ec20002cbf7f0910334bf0dc083032c77ae5f6493fa22423239ea1580660", size = 57443, upload-time = "2026-06-12T18:13:09.725Z" }
-wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/b5/e2/1c290aa1a6cb5a567a13c261f963d5eac496f924178ee3f7eabb78bb49b9/pyopenttdadmin-1.1.0-cp314-cp314-android_24_arm64_v8a.whl", hash = "sha256:78d1c24a80e63ef0f16d3ffa6107d6398643908cd27b054416f2e19760fe25ba", size = 725914, upload-time = "2026-06-12T18:12:27.768Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/bd/06/4a3ca89efd1414ca750cbfc4b30c0432a05a830412d30e87142564e2d319/pyopenttdadmin-1.1.0-cp314-cp314-android_24_x86_64.whl", hash = "sha256:898c4808d4ef57e13138f511aa11a70c695b39a7b2df44405b607cd075da2ad4", size = 697688, upload-time = "2026-06-12T18:12:29.532Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/e5/76/e435ed176093d440ff29fa0bd5597ca1fc879fbee59084ea3dbc24c17741/pyopenttdadmin-1.1.0-cp314-cp314-ios_13_0_arm64_iphoneos.whl", hash = "sha256:20ad5b4252ce8aa40d45502c138c4107063df8150bab1d5f9ed301c856f57987", size = 194546, upload-time = "2026-06-12T18:12:30.909Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/97/2a/52ecfc7dd84b903e226ca115997398762d3d89e29b59c08e5333f56eb6fa/pyopenttdadmin-1.1.0-cp314-cp314-ios_13_0_arm64_iphonesimulator.whl", hash = "sha256:01cfac74efe6e244c5505b5c06bff0adbd93b88fce23a0f1e299ef30afe332ee", size = 198338, upload-time = "2026-06-12T18:12:32.239Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/24/f4/83e6ebe024e081f1297080ea1dd95489437981584228c3bc9e1acd24665b/pyopenttdadmin-1.1.0-cp314-cp314-macosx_10_15_x86_64.whl", hash = "sha256:c0016b3c16704f5ee37377eb656d54c0a8e25c85ba50a6b5ac524fe3b0fef300", size = 205370, upload-time = "2026-06-12T18:12:33.339Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/07/61/152b1f63f410bd4c0aff34da8484113637fb792f52afcc56ea1a80007dcd/pyopenttdadmin-1.1.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:5dea044b58e7642ee0d8d4dfba5ef5aba537e2f4dcbb0af8799861d0ee20e981", size = 198586, upload-time = "2026-06-12T18:12:34.532Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/49/7b/48236724247353eb05f2b3a756fc003c7748b3160406d0f3bc06fbb1aa5a/pyopenttdadmin-1.1.0-cp314-cp314-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:8b8b2dae8054d5814d48dc25d8eb04eddd354035636cd7eecf9a34c7aef5c764", size = 1600017, upload-time = "2026-06-12T18:12:35.755Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/78/da/9baae39ffb6b309bf9e1cf075958c48d7801d6352d7918e0128fb6dd6a35/pyopenttdadmin-1.1.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9e83706db4fb6ffeb16093b8d5f2ff6fa713d9ec047e3cc51b87960c17cd0a9d", size = 1639463, upload-time = "2026-06-12T18:12:37.278Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/82/45/4f1a777c79fc8b899528bed60eceec777799501d040338ee1bed4527f41e/pyopenttdadmin-1.1.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:527729be9c5adeff8ddae42a56fd786dcea8d843c8d348757249fad0ecfe366e", size = 2566074, upload-time = "2026-06-12T18:12:39.027Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ee/e2/44de4135830fe1ff37dd93ea8534076d4982b23880a0203ccc8f27e84155/pyopenttdadmin-1.1.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:624a1d6a9a39ba7d687136c9423f9d639c41a16c0ea086b3a2ff8567a33d364f", size = 2659946, upload-time = "2026-06-12T18:12:40.434Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/c2/b9/ce3ac8d89a85e8b39c963c4d4a6610d9097ef77cb2a2b969f91362978441/pyopenttdadmin-1.1.0-cp314-cp314-win32.whl", hash = "sha256:1863a1c14b01d45885be9d096a4d028ca78142592e2ee3def975a0bc5fd6e576", size = 358881, upload-time = "2026-06-12T18:12:41.825Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/b1/91/8905cb7f68bf3f9faab8d39768e6d4975e3222ee5ba2e80b45bce0657fb5/pyopenttdadmin-1.1.0-cp314-cp314-win_amd64.whl", hash = "sha256:9d7f8cfafd60c775e1003088037e17856254c5c0f0e5fb079e72ada4f581e280", size = 378464, upload-time = "2026-06-12T18:12:42.978Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/64/eb/7761885e4fbe1968f445d3eab1c7beaf2e59a402fa204d7017ea2531265f/pyopenttdadmin-1.1.0-cp314-cp314-win_arm64.whl", hash = "sha256:af67ec7b5b362194325633d3082ea37b2d58ab9f3044a51aa2b4d575cf490909", size = 544084, upload-time = "2026-06-12T18:12:44.244Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/d9/ee/5ed5f6931b4afe5278d144dd4fa2003436ccb8d84b3d8ffc9eab54fde152/pyopenttdadmin-1.1.0-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:5ecf0d8bb7acca0fb1da0483c502498eb2c8216f88b46f5f7ead17b3b1dfb1f5", size = 212024, upload-time = "2026-06-12T18:12:45.447Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ab/3e/c5b09a23c8a83f788fd400652e8c332b110426cd987816dff007e96e730d/pyopenttdadmin-1.1.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:a9e647ff6dfde5013423284e71ec8cdb5ca2194e77c0cdbeaf91398c25d6ade2", size = 205814, upload-time = "2026-06-12T18:12:46.751Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/e7/f7/a30b302f270697ba98c3e424856984053e6dd563398a3c4ff946ceaa5b72/pyopenttdadmin-1.1.0-cp314-cp314t-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:f492f2703d9c9566450ab53cc4eb968158e6326d5e7737346ebb557001c05690", size = 1623852, upload-time = "2026-06-12T18:12:47.988Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/dc/87/79139757dda8efb8e74059035bf026529ed37a92e3e9ef2103118310d49b/pyopenttdadmin-1.1.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:02cf8c3f167641106b389481f6bdb0e7560d8e21553b7e162effb503a9c0e3c5", size = 1660500, upload-time = "2026-06-12T18:12:49.269Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/6b/99/ad46e07573e9120ec41c9a963e6c94fea548ac853731b94a3a726454ed6a/pyopenttdadmin-1.1.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:7d75909b6d1057ba601103a373174fac8c067bb0e18b8a28989614b0c61ed78e", size = 2584085, upload-time = "2026-06-12T18:12:50.759Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/fe/f9/a7d74d8f452abaa5b73720e7afdf526189761402a7bcbd2568b077b202b2/pyopenttdadmin-1.1.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:c1258771cad58f11a7920cfc7d820ea16d905a1d34985ccb5b20470172be67b8", size = 2678516, upload-time = "2026-06-12T18:12:52.073Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/30/87/b51a3ee914561686035ce949ca382b40226fca6834c1df06d733b065e870/pyopenttdadmin-1.1.0-cp314-cp314t-win32.whl", hash = "sha256:d8e9e298637c404acde88344842894818b67b16e2f76c43545be65f283a315f1", size = 362697, upload-time = "2026-06-12T18:12:53.536Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/db/cd/3bdb57ec51e6b355916b8e5b5cfa775ec7621b229b8a875a576f4d5d4381/pyopenttdadmin-1.1.0-cp314-cp314t-win_amd64.whl", hash = "sha256:da2b2aecdb2d08e5718cc1bac4cd57e53486fe0be5ad4c2173b4c517ad86290e", size = 382628, upload-time = "2026-06-12T18:12:54.818Z" },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/aa/88/d8df90246199b5d1f624fb838fe70c5a24feb0815f39bb47219d97750bab/pyopenttdadmin-1.1.0-cp314-cp314t-win_arm64.whl", hash = "sha256:395c0815b3dcb583be127e395381b900d18b8c3e5c0028ecf1cc456a332c8522", size = 549743, upload-time = "2026-06-12T18:12:56.316Z" },
-]
-
-[[package]]
 name = "python-ai"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "pymonocypher" },
-    { name = "pyopenttdadmin" },
     { name = "typing-extensions" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "pymonocypher", specifier = "~=4.0.2" },
-    { name = "pyopenttdadmin", specifier = ">=1.1.0" },
-    { name = "typing-extensions", specifier = ">=4.15.0" },
-]
+requires-dist = [{ name = "typing-extensions", specifier = ">=4.15.0" }]
 
 [[package]]
 name = "typing-extensions"
