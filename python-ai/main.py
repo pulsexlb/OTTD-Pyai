@@ -18,11 +18,13 @@ async def main():
     async def message_send():
         while True:
             message = await asyncio.to_thread(input, ">")
-            await admin._send(p.AdminGameScriptPacket({"msg": message}))
+            message = message.split(" ", 1)
+            await admin._send(p.AdminGameScriptPacket({"company": message[0], "msg": message[1]}))
     
     @admin.add_handler(p.GameScriptPacket)
     async def script_packet(admin: Admin, packet: p.GameScriptPacket):
-        print(f'ID: Message: {packet.json}')
+        data = packet.json
+        print(f'Message: {data.msg} by company: {data.company}')
 
     async def run():
         await admin.run()

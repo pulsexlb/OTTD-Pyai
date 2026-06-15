@@ -12,7 +12,7 @@ class OtherAIGS extends GSController
   {
     GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + message.GetData(1));
     local data = {
-        companyId = message.GetIntData(0)
+        company = message.GetIntData(0)
         msg = message.GetData(1)
     }
     GSAdmin.Send(data)
@@ -33,7 +33,6 @@ function OtherAIGS::Start()
   while (true) {
     while (this._scp.Check()) {}
     this.HandleEvents();
-    this.Sleep(5);
   }
 }
 
@@ -42,6 +41,15 @@ function OtherAIGS::HandleEvents()
   while (GSEventController.IsEventWaiting()) {
     local ev = GSEventController.GetNextEvent();
     if (ev == null) continue;
+    local ev_type = ev.GetEventType();
+    switch (ev_type) {
+      case GSEvent.ET_ADMIN_PORT: {
+        local event = GSEventAdminPort.Convert(ev);
+        local data = event.GetObject();
+        local company = data.company;
+        local message = data.msg;
+      }
+    }
   }
 }
 

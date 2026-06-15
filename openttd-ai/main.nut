@@ -11,6 +11,16 @@ class OtherAI extends AIController
   _scp = null;
   _commandSet = "MsgCmdSet";
   _companyId = 0;
+
+  function _OnReceiveMessage(message, self)
+  {
+    AILog.Info("Get message from python: " + message.GetData(1));
+    local data = {
+        companyId = message.GetIntData(0)
+        msg = message.GetData(1)
+    }
+    GSAdmin.Send(data)
+  }
 }
 
 function OtherAI::Start()
