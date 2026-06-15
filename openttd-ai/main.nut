@@ -14,12 +14,7 @@ class OtherAI extends AIController
 
   function _OnReceiveMessage(message, self)
   {
-    AILog.Info("Get message from python: " + message.GetData(1));
-    local data = {
-        companyId = message.GetIntData(0)
-        msg = message.GetData(1)
-    }
-    GSAdmin.Send(data)
+    AILog.Info("Get message from python: " + message.GetData(0));
   }
 }
 
@@ -44,7 +39,7 @@ function OtherAI::Start()
   
   this._companyId = AICompany.ResolveCompanyID(AICompany.COMPANY_SELF);
   AILog.Info("OtherAI started with id " + this._companyId);
-  local ret = this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "Established");
+  local ret = this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "Established. Hello from ai");
   while (true) {
     while (this._scp.Check()) {}
     this.HandleEvents();
@@ -63,4 +58,5 @@ function OtherAI::HandleEvents()
 function OtherAI::RegisterCommands()
 {
   this._scp.AddCommand("SendAdminMsg", this._commandSet, this, null);
+  this._scp.AddCommand("ReceiveAIMsg", this._commandSet, this, this._OnReceiveMessage);
 }

@@ -46,8 +46,9 @@ function OtherAIGS::HandleEvents()
       case GSEvent.ET_ADMIN_PORT: {
         local event = GSEventAdminPort.Convert(ev);
         local data = event.GetObject();
-        local company = data.company;
+        local company = data.company.tointeger();
         local message = data.msg;
+        this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, message)
       }
     }
   }
@@ -57,4 +58,5 @@ function OtherAIGS::HandleEvents()
 function OtherAIGS::RegisterCommands()
 {
   this._scp.AddCommand("SendAdminMsg", this._commandSet, this, this._OnSendAdminMessage);
+  this._scp.AddCommand("ReceiveAIMsg", this._commandSet, this, null);
 }
