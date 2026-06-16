@@ -2,6 +2,8 @@ from aiopyopenttdadmin import Admin, AdminUpdateType, openttdpacket as p, Auth
 import asyncio
 import json as js
 
+from event import Event
+
 class OpenttdControl:
     ip_address: str
     port: int
@@ -29,7 +31,14 @@ class OpenttdControl:
 
     async def _receive_message_hander(self, admin: Admin, packet: p.GameScriptPacket) -> None:
         data = js.loads(packet.json.rstrip('\x00'))
-        print(f'company {data["company"]} sent a message: {data["msg"]}')
+        company = int(data["company"])
+        if company != -1 and company != self.company_id:
+            return
+        data = data["msg"]
+        if data["type"] == "event":
+            event_data = data["event"]
+            event = Event.from_json(event_data)
+            print(f"Received event: {type(event).__name__} -> {event.__dict__}")
 
     async def _send_msg(self, msg: dict) -> None:
         await self.admin.send_gamescript({

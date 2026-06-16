@@ -58,7 +58,6 @@ function OtherAI::Start()
   while (true) {
     while (this._scp.Check()) {}
     this.HandleEvents();
-    this.Sleep(5);
   }
 }
 
