@@ -1,4 +1,8 @@
-from typing import Any, Dict, Type
+"""
+Events return from openttd
+"""
+
+from typing import Any, Dict, List, Type
 
 from openttd_types import (
     CompanyID,
@@ -283,3 +287,23 @@ class VehicleCrashed(Event):
         self.crash_reason = CrashReason(crash_reason)
         self.victims = victims
         self.vehicle_owner = vehicle_owner
+
+
+class EventQueue:
+    """
+    A structure that store events witch are going to handle.
+    """
+    events: List[Event] = []
+
+    def __init__(self) -> None:
+        pass
+
+    def push(self, event: Event):
+        self.events.append(event)
+
+    def pop(self) -> Event | None:
+        if len(self.events) == 0:
+            return None
+        first = self.events[0]
+        del self.events[0]
+        return first
