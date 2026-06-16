@@ -55,9 +55,25 @@ function OtherAIGS::HandleEvents()
       case GSEvent.ET_ADMIN_PORT: {
         local event = GSEventAdminPort.Convert(ev);
         local data = event.GetObject();
-        local company = data.company.tointeger();
-        local message = data.msg;
-        this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, message)
+        // local company = data.company.tointeger();
+        // local message = data.msg;
+        // this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, message)
+        local type = data.type
+        if(type == "query"){
+            local query_id = data.query.id
+            local message = data.query.msg
+            GSLog.Info("Get query message " + message + " | id: " + query_id)
+            this._SentMessageToPython(
+              {
+                type="query_result"
+                id = query_id
+                result = {
+                  status = "received query"
+                  data = message
+                }
+              }
+            );
+        }
         break;
       }
 

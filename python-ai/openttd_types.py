@@ -1,13 +1,13 @@
 from enum import Enum
 
-VehicleID  = type('VehicleID',  (int,), {})
-StationID  = type('StationID',  (int,), {})
-EngineID   = type('EngineID',   (int,), {})
-CompanyID  = type('CompanyID',  (int,), {})
-IndustryID = type('IndustryID', (int,), {})
-SubsidyID  = type('SubsidyID',  (int,), {})
-TownID     = type('TownID',     (int,), {})
-TileIndex  = type('TileIndex',  (int,), {})
+type VehicleID = int
+type StationID = int
+type EngineID = int
+type CompanyID = int
+type IndustryID = int
+type SubsidyID = int
+type TownID = int
+type TileIndex = int
 
 
 # See: https://docs.openttd.org/gs-api/classGSEventVehicleCrashed#ac59fab58c99a5530a9340a1d404560f1
