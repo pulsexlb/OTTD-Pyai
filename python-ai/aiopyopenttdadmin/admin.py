@@ -205,6 +205,16 @@ class Admin:
         """
         await self._chat(message, action = Actions.CHAT_CLIENT, desttype = ChatDestTypes.CLIENT, id = id)
 
+    async def send_gamescript(
+        self,
+        message: dict
+    ) -> None:
+        """Send a message to gamescript.
+
+        - message (dict): The message to send.
+        """
+        await self._send(AdminGameScriptPacket(message))
+
     async def subscribe(
         self,
         type: AdminUpdateType,

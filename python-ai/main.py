@@ -2,33 +2,52 @@ from aiopyopenttdadmin import Admin, AdminUpdateType, openttdpacket as p, Auth
 import asyncio
 import json as js
 
-ip_address = "127.0.0.1"
-port_number = 3977
+class OpenttdControl:
+    ip_address: str
+    port: int
+    admin: Admin
+    company_id: int
 
-auth = Auth(
-    name = "OtherAIAdmin",
-    version = "15.3",
-    password = "123456"
-)
+    def __init__(
+            self,
+            ip_address: str,
+            port: int,
+            company_id: int,
+            password: str,
+            name: str = "OtherAIAdmin",
+            version: str = "15.3"
+        ) -> None:
+        auth = Auth(
+            name = name,
+            version = version,
+            password = password
+        )
+        self.company_id = company_id
+        self.ip_address = ip_address
+        self.port = port
+        self.admin = Admin(ip = ip_address, port = port, auth = auth)
 
-async def main():
-    admin = Admin(ip = ip_address, port = port_number, auth = auth)
-    await admin.connect()
-    await admin.subscribe(AdminUpdateType.GAMESCRIPT)
-
-    async def message_send():
-        while True:
-            message = await asyncio.to_thread(input, ">")
-            message = message.split(" ", 1)
-            await admin._send(p.AdminGameScriptPacket({"company": int(message[0]), "msg": message[1]}))
-    
-    @admin.add_handler(p.GameScriptPacket)
-    async def script_packet(admin: Admin, packet: p.GameScriptPacket):
+    async def _receive_message_hander(self, admin: Admin, packet: p.GameScriptPacket) -> None:
         data = js.loads(packet.json.rstrip('\x00'))
         print(f'company {data["company"]} sent a message: {data["msg"]}')
 
-    asyncio.create_task(message_send())
-    await admin.run()
+    async def _send_msg(self, msg: dict) -> None:
+        await self.admin.send_gamescript({
+            "company": self.company_id,
+            "msg": msg
+        })
+
+    async def run(self):
+        await self.admin.connect()
+        await self.admin.subscribe(AdminUpdateType.GAMESCRIPT)
+
+        self.admin.add_handler(p.GameScriptPacket)(self._receive_message_hander)
+
+        await self.admin.run()
+
+ip_address = "127.0.0.1"
+port_number = 3977
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    control = OpenttdControl(ip_address, port_number, 1, "123456")
+    asyncio.run(control.run())
