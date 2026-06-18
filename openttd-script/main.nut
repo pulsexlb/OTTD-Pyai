@@ -40,6 +40,38 @@ class OtherAIGS extends GSController
         };
         break;
       }
+      case "event": {
+        local event_name = message.GetStringData(2);
+        local encoded = message.GetStringData(3);
+        local event_data = {};
+        if (encoded != null && encoded != "") {
+          local pairs = SplitString(encoded, "|");
+          foreach (pair in pairs) {
+            local kv = SplitString(pair, "=");
+            if (kv.len() >= 2) {
+              local key = kv[0];
+              local val_str = kv[1];
+              for (local i = 2; i < kv.len(); i++) {
+                val_str += "=" + kv[i];
+              }
+              local int_val = val_str.tointeger();
+              if (int_val != null) {
+                event_data[key] <- int_val;
+              } else {
+                event_data[key] <- val_str;
+              }
+            }
+          }
+        }
+        msg = {
+          type = msg_type
+          event = {
+            name = event_name
+            data = event_data
+          }
+        };
+        break;
+      }
     }
     GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + msg);
     local data = {

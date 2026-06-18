@@ -24,6 +24,15 @@ class OtherAI extends AIController
         this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "query_result", message.id, encoded);
         break;
       }
+      case "event": {
+        local encoded = "";
+        foreach (key, val in message.event.data) {
+          if (encoded != "") encoded += "|";
+          encoded += key + "=" + val;
+        }
+        this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "event", message.event.name, encoded);
+        break;
+      }
     }
   }
 
