@@ -1,15 +1,59 @@
 import asyncio
 from control import OpenttdControl
-from reqst import CompanyReq
+from reqst import AccountingReq, AirportReq, BaseReq, BaseStationReq, BridgeReq, CargoReq, CompanyReq, DateReq, EngineReq, ErrorReq, GameSettingsReq, GroupReq, InfrastructureReq, LogReq, MapReq, MarineReq, NewGRFReq, ObjectTypeReq, SignReq, StationReq, SubsidyReq, TunnelReq, WaypointReq
 
 class OpenttdAI:
     control: OpenttdControl
 
     company: CompanyReq
+    accounting: AccountingReq
+    airport: AirportReq
+    bridge: BridgeReq
+    cargo: CargoReq
+    base: BaseReq
+    date: DateReq
+    error: ErrorReq
+    log: LogReq
+    map: MapReq
+    base_station: BaseStationReq
+    engine: EngineReq
+    game_settings: GameSettingsReq
+    sign: SignReq
+    subsidy: SubsidyReq
+    tunnel: TunnelReq
+    newgrf: NewGRFReq
+    infrastructure: InfrastructureReq
+    station: StationReq
+    waypoint: WaypointReq
+    group: GroupReq
+    marine: MarineReq
+    object_type: ObjectTypeReq
 
     def __init__(self, control: OpenttdControl) -> None:
         self.control = control
         self.company = CompanyReq(control)
+        self.accounting = AccountingReq(control)
+        self.airport = AirportReq(control)
+        self.bridge = BridgeReq(control)
+        self.cargo = CargoReq(control)
+        self.base = BaseReq(control)
+        self.date = DateReq(control)
+        self.error = ErrorReq(control)
+        self.log = LogReq(control)
+        self.map = MapReq(control)
+        self.base_station = BaseStationReq(control)
+        self.engine = EngineReq(control)
+        self.game_settings = GameSettingsReq(control)
+        self.sign = SignReq(control)
+        self.subsidy = SubsidyReq(control)
+        self.tunnel = TunnelReq(control)
+        self.newgrf = NewGRFReq(control)
+        self.infrastructure = InfrastructureReq(control)
+        self.station = StationReq(control)
+        self.waypoint = WaypointReq(control)
+        self.group = GroupReq(control)
+        self.marine = MarineReq(control)
+        self.object_type = ObjectTypeReq(control)
 
     async def run(self):
         while True:
