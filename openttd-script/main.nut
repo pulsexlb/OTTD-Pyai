@@ -2,6 +2,8 @@
 
 import("library.scplib", "SCPLib", 45);
 
+require("utils.nut")
+
 class OtherAIGS extends GSController
 {
   function Start();
@@ -10,10 +12,39 @@ class OtherAIGS extends GSController
   
   function _OnSendAdminMessage(message, self)
   {
-    GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + message.GetData(1));
+    local msg = {};
+    local msg_type = message.GetStringData(1);
+    switch (msg_type) {
+      case "query_result": {
+        local q_id = message.GetIntData(2);
+        local q_res = {};
+        local encoded = message.GetStringData(3);
+        if (encoded != null && encoded != "") {
+          local pairs = SplitString(encoded, "|");
+          foreach (pair in pairs) {
+            local kv = SplitString(pair, "=");
+            if (kv.len() >= 2) {
+              local key = kv[0];
+              local val = kv[1];
+              for (local i = 2; i < kv.len(); i++) {
+                val += "=" + kv[i];
+              }
+              q_res[key] <- val;
+            }
+          }
+        }
+        msg = {
+          type = msg_type
+          id = q_id
+          result = q_res
+        };
+        break;
+      }
+    }
+    GSLog.Info("AI company id " + message.GetIntData(0) + " send Message: " + msg);
     local data = {
         company = message.GetIntData(0)
-        msg = message.GetData(1)
+        msg = msg
     }
     GSAdmin.Send(data)
   }
@@ -35,6 +66,7 @@ function OtherAIGS::Start()
 {
   this._scp = SCPLib("OTGS", "1.0");
   this._scp.SetEventHandling(true);
+  this._scp.SCPLogging_Error(true);
   this.RegisterCommands();
 
   GSLog.Info("OtherAI game script started");
@@ -55,24 +87,13 @@ function OtherAIGS::HandleEvents()
       case GSEvent.ET_ADMIN_PORT: {
         local event = GSEventAdminPort.Convert(ev);
         local data = event.GetObject();
-        // local company = data.company.tointeger();
-        // local message = data.msg;
-        // this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, message)
-        local type = data.type
-        if(type == "query"){
-            local query_id = data.query.id
-            local message = data.query.msg
-            GSLog.Info("Get query message " + message + " | id: " + query_id)
-            this._SentMessageToPython(
-              {
-                type="query_result"
-                id = query_id
-                result = {
-                  status = "received query"
-                  data = message
-                }
-              }
-            );
+        local company = data.company.tointeger();
+        local message = data.msg;
+        switch (message.type) {
+          case "query": {
+            this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, "query", message.query.id, message.query.key);
+            break;
+          }
         }
         break;
       }

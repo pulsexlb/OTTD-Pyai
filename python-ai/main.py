@@ -54,9 +54,9 @@ class OpenttdControl:
             self.queries.add_result(query_id, query_data)
 
     async def _send_msg(self, msg: dict) -> None:
-        await self.admin.send_gamescript(msg)
+        await self.admin.send_gamescript({"company": self.company_id, "msg": msg})
 
-    async def query(self, msg: str, checktime: float = 0.1, timeout: float = 1) -> Any:
+    async def query(self, key: str, checktime: float = 0.1, timeout: float = 1) -> Any:
         """
         query something from openttd
         - checktime: How long to check the query result
@@ -67,7 +67,7 @@ class OpenttdControl:
             "type": "query",
             "query": {
                 "id": query_id,
-                "msg": msg
+                "key": key
             }
         })
         for _ in range(int(timeout/checktime)):

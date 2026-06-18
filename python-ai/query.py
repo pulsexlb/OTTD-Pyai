@@ -1,5 +1,7 @@
 from typing import Any, Dict, List, Optional
 
+from openttd_types import CompanyID, Gender, Money, TileIndex
+
 type QueryID = int
 
 class QueryList:
@@ -31,3 +33,18 @@ class QueryList:
         if the result is exist return the result, otherwise return None
         """
         return self.query_results.get(query_id)
+
+class CompanyQuery:
+    company_id: CompanyID
+    name: str
+    president_name: str
+    president_gender: Gender
+    loan_amount: Money
+    max_loan_amount: Money
+    loan_interval: Money
+    bank_balance: Money
+    company_hq: Optional[TileIndex]
+    auto_renew_status: bool
+    auto_renew_months: int
+    auto_renew_money: Money
+

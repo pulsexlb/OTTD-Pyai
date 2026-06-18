@@ -12,14 +12,42 @@ class OtherAI extends AIController
   _commandSet = "MsgCmdSet";
   _companyId = 0;
 
-  function _OnReceiveMessage(message, self)
-  {
-    AILog.Info("Get message from python: " + message.GetData(0));
-  }
-
   function _SentMessageToPython(message)
   {
-    this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, message);
+    switch (message.type) {
+      case "query_result": {
+        local encoded = "";
+        foreach (key, val in message.result) {
+          if (encoded != "") encoded += "|";
+          encoded += key + "=" + val;
+        }
+        this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "query_result", message.id, encoded);
+        break;
+      }
+    }
+  }
+
+  
+}
+
+function OtherAI::_OnReceiveMessage(message, self)
+{
+  local type = message.GetStringData(0);
+  AILog.Info("Get message type: " + type);
+  if(type == "query"){
+    local query_id = message.GetIntData(1);
+    local key = message.GetStringData(2);
+    AILog.Info("Get query message " + key + " | id: " + query_id)
+    self._SentMessageToPython(
+      {
+        type="query_result"
+        id = query_id
+        result = {
+          status = "received query"
+          data = key
+        }
+      }
+    );
   }
 }
 
@@ -34,27 +62,17 @@ function OtherAI::Start()
 
   this._scp = SCPLib("OTHR", "1.0");
   this._scp.SetEventHandling(true);
+  this._scp.SCPLogging_Error(true);
   this.RegisterCommands();
 
   while (!this._scp.CanSpeakWith(16)) {
     AILog.Info("Waiting for GS registration...");
     while (this._scp.Check()) {}
-    this.Sleep(1);
   }
   
   this._companyId = AICompany.ResolveCompanyID(AICompany.COMPANY_SELF);
   AILog.Info("OtherAI started with id " + this._companyId + " name " + AICompany.GetName(this._companyId));
-  
-  // this._SentMessageToPython(
-  //   {
-  //     type="establish_message"
-  //     info={
-  //       name=AICompany.GetName(this._companyId)
-  //       company_id=this._companyId
-  //     }
-  //   }
-  // );
-  // idk why this message cannot be sent. but a string can be send. i really have no idea
+
   while (true) {
     while (this._scp.Check()) {}
     this.HandleEvents();
