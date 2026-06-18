@@ -1,98 +1,15 @@
-from typing import Any
-from aiopyopenttdadmin import Admin, AdminUpdateType, openttdpacket as p, Auth
 import asyncio
-import json as js
-
-from event import Event, EventQueue
-from query import QueryList
-
-class OpenttdControl:
-    ip_address: str
-    port: int
-    admin: Admin
-    company_id: int
-
-    events: EventQueue
-    queries: QueryList
-
-    def __init__(
-            self,
-            ip_address: str,
-            port: int,
-            company_id: int,
-            password: str,
-            name: str = "OtherAIAdmin",
-            version: str = "15.3"
-        ) -> None:
-        auth = Auth(
-            name = name,
-            version = version,
-            password = password
-        )
-        self.company_id = company_id
-        self.ip_address = ip_address
-        self.port = port
-        self.admin = Admin(ip = ip_address, port = port, auth = auth)
-        self.events = EventQueue()
-        self.queries = QueryList()
-
-    async def _receive_message_hander(self, admin: Admin, packet: p.GameScriptPacket) -> None:
-        data = js.loads(packet.json.rstrip('\x00'))
-        company = int(data["company"])
-        if company != -1 and company != self.company_id:
-            return
-        data = data["msg"]
-        if data["type"] == "event":
-            event_data = data["event"]
-            event = Event.from_json(event_data)
-            print(f"Received event: {type(event).__name__} -> {event.__dict__}")
-            self.events.push(event)
-        if data["type"] == "query_result":
-            query_id = data["id"]
-            query_data = data["result"]
-            print(f"Received query result {query_data} | id: {query_id}")
-            self.queries.add_result(query_id, query_data)
-
-    async def _send_msg(self, msg: dict) -> None:
-        await self.admin.send_gamescript({"company": self.company_id, "msg": msg})
-
-    async def query(self, key: str, checktime: float = 0.1, timeout: float = 1) -> Any:
-        """
-        query something from openttd
-        - checktime: How long to check the query result
-        - timeout: Max time to check the query result
-        """
-        query_id = self.queries.new_query()
-        await self._send_msg({
-            "type": "query",
-            "query": {
-                "id": query_id,
-                "key": key
-            }
-        })
-        for _ in range(int(timeout/checktime)):
-            result = self.queries.check_result(query_id)
-            if result != None:
-                return result
-            await asyncio.sleep(checktime)
-        return None
-
-    async def run(self):
-        """
-        run the control
-        """
-        await self.admin.connect()
-        await self.admin.subscribe(AdminUpdateType.GAMESCRIPT)
-
-        self.admin.add_handler(p.GameScriptPacket)(self._receive_message_hander)
-
-        await self.admin.run()
+from control import OpenttdControl
+from reqst import CompanyReq
 
 class OpenttdAI:
     control: OpenttdControl
 
+    company: CompanyReq
+
     def __init__(self, control: OpenttdControl) -> None:
         self.control = control
+        self.company = CompanyReq(control)
 
     async def run(self):
         while True:
@@ -100,7 +17,7 @@ class OpenttdAI:
                 break
             await asyncio.sleep(0.1)
         handle_event = asyncio.create_task(self.handle_events())
-        query_event = asyncio.create_task(self.send_query())
+        query_event = asyncio.create_task(self.send_query_test())
         await asyncio.gather(handle_event, query_event)
 
     async def handle_events(self):
@@ -113,11 +30,92 @@ class OpenttdAI:
                 print(f"Handle event: {type(event).__name__} -> {event.__dict__}")
             await asyncio.sleep(0.5)
 
-    async def send_query(self):
-        while True:
-            result = await self.control.query("a sim query")
-            print(f"Handle query result: {result}")
-            await asyncio.sleep(10)
+    async def send_query_test(self):
+        result = await self.company.query_name()
+        print(f"Handle query result: query_name -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_president_name()
+        print(f"Handle query result: query_president_name -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_president_gender()
+        print(f"Handle query result: query_president_gender -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_loan_amount()
+        print(f"Handle query result: query_loan_amount -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_max_loan_amount()
+        print(f"Handle query result: query_max_loan_amount -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_loan_interval()
+        print(f"Handle query result: query_loan_interval -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_bank_balance()
+        print(f"Handle query result: query_bank_balance -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_company_hq()
+        print(f"Handle query result: query_company_hq -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_auto_renew_status()
+        print(f"Handle query result: query_auto_renew_status -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_auto_renew_months()
+        print(f"Handle query result: query_auto_renew_months -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_auto_renew_money()
+        print(f"Handle query result: query_auto_renew_money -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_quarterly_income()
+        print(f"Handle query result: query_quarterly_income -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_quarterly_expenses()
+        print(f"Handle query result: query_quarterly_expenses -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_quarterly_cargo_delivered()
+        print(f"Handle query result: query_quarterly_cargo_delivered -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_quarterly_performance_rating()
+        print(f"Handle query result: query_quarterly_performance_rating -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.query_quarterly_company_value()
+        print(f"Handle query result: query_quarterly_company_value -> {result}")
+
+        await asyncio.sleep(1)
+
+        result = await self.company.set_name("Pyai-OTTD")
+        print(f"Handle query result: set_name -> {result}")
+
+        await asyncio.sleep(1)
+
 
 ip_address = "127.0.0.1"
 port_number = 3977

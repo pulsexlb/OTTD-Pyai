@@ -1,7 +1,5 @@
 from typing import Any, Dict, List, Optional
 
-from openttd_types import CompanyID, Gender, Money, TileIndex
-
 type QueryID = int
 
 class QueryList:
@@ -24,8 +22,9 @@ class QueryList:
         """
         add result when query returned.
         """
-        self.running_query.remove(query_id)
-        self.query_results[query_id] = result
+        if query_id in self.running_query:
+            self.running_query.remove(query_id)
+            self.query_results[query_id] = result
 
     def check_result(self, query_id: QueryID) -> Optional[Any]:
         """
@@ -34,17 +33,4 @@ class QueryList:
         """
         return self.query_results.get(query_id)
 
-class CompanyQuery:
-    company_id: CompanyID
-    name: str
-    president_name: str
-    president_gender: Gender
-    loan_amount: Money
-    max_loan_amount: Money
-    loan_interval: Money
-    bank_balance: Money
-    company_hq: Optional[TileIndex]
-    auto_renew_status: bool
-    auto_renew_months: int
-    auto_renew_money: Money
 

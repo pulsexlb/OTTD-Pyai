@@ -2,6 +2,9 @@
 
 import("library.scplib", "SCPLib", 45);
 
+require("query.nut")
+require("utils.nut")
+
 class OtherAI extends AIController 
 {
   function Start();
@@ -16,12 +19,7 @@ class OtherAI extends AIController
   {
     switch (message.type) {
       case "query_result": {
-        local encoded = "";
-        foreach (key, val in message.result) {
-          if (encoded != "") encoded += "|";
-          encoded += key + "=" + val;
-        }
-        this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "query_result", message.id, encoded);
+        this._scp.TellServer("SendAdminMsg", this._commandSet, this._companyId, "query_result", message.id, message.result);
         break;
       }
       case "event": {
@@ -46,17 +44,31 @@ function OtherAI::_OnReceiveMessage(message, self)
   if(type == "query"){
     local query_id = message.GetIntData(1);
     local key = message.GetStringData(2);
-    AILog.Info("Get query message " + key + " | id: " + query_id)
-    self._SentMessageToPython(
-      {
-        type="query_result"
-        id = query_id
-        result = {
-          status = "received query"
-          data = key
+    local params_encoded = message.GetStringData(3);
+    local params = {};
+    if (params_encoded != null && params_encoded != "") {
+      local pairs = SplitString(params_encoded, "|");
+      foreach (pair in pairs) {
+        local kv = SplitString(pair, "=");
+        if (kv.len() >= 2) {
+          local pkey = kv[0];
+          local pval = kv[1];
+          for (local i = 2; i < kv.len(); i++) {
+            pval += "=" + kv[i];
+          }
+          AILog.Info(pkey + " " + pval);
+          params[pkey] <- pval;
         }
       }
-    );
+    }
+    AILog.Info("Get query message " + key + " | id: " + query_id);
+    local res = Query(key, params);
+    AILog.Info(res);
+    self._SentMessageToPython({
+      type = "query_result"
+      id = query_id
+      result = res
+    });
   }
 }
 
@@ -71,7 +83,7 @@ function OtherAI::Start()
 
   this._scp = SCPLib("OTHR", "1.0");
   this._scp.SetEventHandling(true);
-  this._scp.SCPLogging_Error(true);
+  // this._scp.SCPLogging_Error(true);
   this.RegisterCommands();
 
   while (!this._scp.CanSpeakWith(16)) {

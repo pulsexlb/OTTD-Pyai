@@ -17,26 +17,11 @@ class OtherAIGS extends GSController
     switch (msg_type) {
       case "query_result": {
         local q_id = message.GetIntData(2);
-        local q_res = {};
-        local encoded = message.GetStringData(3);
-        if (encoded != null && encoded != "") {
-          local pairs = SplitString(encoded, "|");
-          foreach (pair in pairs) {
-            local kv = SplitString(pair, "=");
-            if (kv.len() >= 2) {
-              local key = kv[0];
-              local val = kv[1];
-              for (local i = 2; i < kv.len(); i++) {
-                val += "=" + kv[i];
-              }
-              q_res[key] <- val;
-            }
-          }
-        }
+        local q_result = message.GetData(3);
         msg = {
           type = msg_type
           id = q_id
-          result = q_res
+          result = q_result
         };
         break;
       }
@@ -98,7 +83,7 @@ function OtherAIGS::Start()
 {
   this._scp = SCPLib("OTGS", "1.0");
   this._scp.SetEventHandling(true);
-  this._scp.SCPLogging_Error(true);
+  // this._scp.SCPLogging_Error(true);
   this.RegisterCommands();
 
   GSLog.Info("OtherAI game script started");
@@ -123,7 +108,14 @@ function OtherAIGS::HandleEvents()
         local message = data.msg;
         switch (message.type) {
           case "query": {
-            this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, "query", message.query.id, message.query.key);
+            local params_encoded = "";
+            if (message.query.params != null) {
+              foreach (key, val in message.query.params) {
+                if (params_encoded != "") params_encoded += "|";
+                params_encoded += key + "=" + val;
+              }
+            }
+            this._scp.TellCompany("ReceiveAIMsg", this._commandSet, company, "query", message.query.id, message.query.key, params_encoded);
             break;
           }
         }
