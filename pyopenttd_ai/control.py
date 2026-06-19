@@ -6,6 +6,22 @@ import json as js
 from event import Event, EventQueue
 from query import QueryList
 
+class ConnectionSetting:
+    """Connection setting for openttd admin port."""
+    ip_address: str
+    port_num: int
+    password: str
+    connection_name: str
+    connection_version: str
+    
+    def __init__(self, ip_address: str = "127.0.0.1", port_num: int = 3977, password: str = "",
+                 connection_name: str = "OtherAIAdmin", connection_version: str = "15.3") -> None:
+        self.ip_address = ip_address
+        self.port_num = port_num
+        self.password = password
+        self.connection_name = connection_name
+        self.connection_version = connection_version
+
 class OpenttdControl:
     ip_address: str
     port: int
@@ -17,22 +33,18 @@ class OpenttdControl:
 
     def __init__(
             self,
-            ip_address: str,
-            port: int,
             company_id: int,
-            password: str,
-            name: str = "OtherAIAdmin",
-            version: str = "15.3"
+            connection_setting: ConnectionSetting
         ) -> None:
         auth = Auth(
-            name = name,
-            version = version,
-            password = password
+            name = connection_setting.connection_name,
+            version = connection_setting.connection_version,
+            password = connection_setting.password
         )
         self.company_id = company_id
-        self.ip_address = ip_address
-        self.port = port
-        self.admin = Admin(ip = ip_address, port = port, auth = auth)
+        self.ip_address = connection_setting.ip_address
+        self.port = connection_setting.port_num
+        self.admin = Admin(ip = connection_setting.ip_address, port = connection_setting.port_num, auth = auth)
         self.events = EventQueue()
         self.queries = QueryList()
 
