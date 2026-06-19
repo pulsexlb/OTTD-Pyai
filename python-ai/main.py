@@ -1,6 +1,11 @@
 import asyncio
 from control import OpenttdControl
-from reqst import AccountingReq, AirportReq, BaseReq, BaseStationReq, BridgeReq, CargoReq, CompanyReq, DateReq, EngineReq, ErrorReq, GameSettingsReq, GroupReq, InfrastructureReq, LogReq, MapReq, MarineReq, NewGRFReq, ObjectTypeReq, SignReq, StationReq, SubsidyReq, TunnelReq, WaypointReq
+from reqst import AccountingReq, AirportReq, BaseReq,\
+        BaseStationReq, BridgeReq, CargoReq, CompanyReq,\
+        DateReq, EngineReq, ErrorReq, GameSettingsReq, GroupReq,\
+        IndustryReq, IndustryTypeReq, InfrastructureReq, LogReq,\
+        MapReq, MarineReq, NewGRFReq, ObjectTypeReq, OrderReq, RailReq,\
+        RoadReq, SignReq, StationReq, SubsidyReq, TileReq, TownReq, TunnelReq, VehicleReq, WaypointReq
 
 class OpenttdAI:
     control: OpenttdControl
@@ -28,6 +33,14 @@ class OpenttdAI:
     group: GroupReq
     marine: MarineReq
     object_type: ObjectTypeReq
+    industry: IndustryReq
+    industry_type: IndustryTypeReq
+    town: TownReq
+    order: OrderReq
+    vehicle: VehicleReq
+    rail: RailReq
+    road: RoadReq
+    tile: TileReq
 
     def __init__(self, control: OpenttdControl) -> None:
         self.control = control
@@ -54,6 +67,14 @@ class OpenttdAI:
         self.group = GroupReq(control)
         self.marine = MarineReq(control)
         self.object_type = ObjectTypeReq(control)
+        self.industry = IndustryReq(control)
+        self.industry_type = IndustryTypeReq(control)
+        self.town = TownReq(control)
+        self.order = OrderReq(control)
+        self.vehicle = VehicleReq(control)
+        self.rail = RailReq(control)
+        self.road = RoadReq(control)
+        self.tile = TileReq(control)
 
     async def run(self):
         while True:

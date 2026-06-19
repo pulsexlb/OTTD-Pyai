@@ -1,7 +1,12 @@
 from typing import Optional
 from control import OpenttdControl
 
-from openttd_types import AirportType, BridgeType, BuildType, CargoClass, CargoType, CompanyID, DateType, DistributionType, EngineID, ErrorCategories, Gender, GroupID, Money, ObjectType, PlaneType, RailType, RoadType, SignID, StationID, SubsidyID, SubsidyParticipantType, TileIndex, TownEffect, TownID, VehicleType, WaypointType
+from openttd_types import AirportType, BridgeType, BuildType, CargoAcceptState,\
+        CargoClass, CargoType, CompanyID, DateType, DistributionType, EngineID,\
+        ErrorCategories, Gender, GroupID, IndustryID, IndustryType, Money, ObjectType,\
+        OrderPosition, PlaneType, RailType, RoadLayout, RoadType, SignID, StationID,\
+        SubsidyID, SubsidyParticipantType, TileIndex, TownAction, TownEffect, TownID,\
+        TownRating, TownSize, VehicleID, VehicleType, WaypointType
 
 
 class CompanyReq:
@@ -266,9 +271,9 @@ class BridgeReq:
         """Get the name of a bridge."""
         return await self.control.query("get_bridge_name", params={"bridge_type": bridge_type, "vehicle_type": vehicle_type.value})
 
-    async def query_get_max_speed(self, bridge_type: BridgeType) -> int:
+    async def query_get_bridge_max_speed(self, bridge_type: BridgeType) -> int:
         """Get the maximum speed of a bridge."""
-        return await self.control.query("get_max_speed", params={"bridge_type": bridge_type})
+        return await self.control.query("get_bridge_max_speed", params={"bridge_type": bridge_type})
 
     async def query_get_bridge_price(self, bridge_type: BridgeType, length: int) -> Money:
         """Get the new cost of a bridge, excluding the road and/or rail."""
@@ -589,9 +594,9 @@ class EngineReq:
         """Get the power of an engine."""
         return await self.control.query("get_power", params={"engine_id": engine_id})
 
-    async def query_get_weight(self, engine_id: EngineID) -> int:
+    async def query_get_engine_weight(self, engine_id: EngineID) -> int:
         """Get the weight of an engine."""
-        return await self.control.query("get_weight", params={"engine_id": engine_id})
+        return await self.control.query("get_engine_weight", params={"engine_id": engine_id})
 
     async def query_get_max_tractive_effort(self, engine_id: EngineID) -> int:
         """Get the maximum tractive effort of an engine."""
@@ -1005,3 +1010,555 @@ class ObjectTypeReq:
     async def resolve_newgrf_id(self, grfid: int, grf_local_id: int) -> ObjectType:
         """Get a specific object-type from a grf."""
         return await self.control.query("resolve_newgrf_id", params={"grfid": grfid, "grf_local_id": grf_local_id})
+
+
+class IndustryReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_get_industry_count(self) -> int:
+        """Gets the number of industries."""
+        return await self.control.query("get_industry_count")
+
+    async def query_is_valid_industry(self, industry_id: IndustryID) -> bool:
+        """Checks whether the given industry index is valid."""
+        return await self.control.query("is_valid_industry", params={"industry_id": industry_id})
+
+    async def query_get_industry_id(self, tile: TileIndex) -> IndustryID:
+        """Get the IndustryID of a tile, if there is an industry."""
+        return await self.control.query("get_industry_id", params={"tile": tile})
+
+    async def query_get_industry_name(self, industry_id: IndustryID) -> str:
+        """Get the name of the industry."""
+        return await self.control.query("get_industry_name", params={"industry_id": industry_id})
+
+    async def query_is_cargo_accepted(self, industry_id: IndustryID, cargo_type: CargoType) -> CargoAcceptState:
+        """See whether an industry currently accepts a certain cargo."""
+        result = await self.control.query("is_cargo_accepted", params={"industry_id": industry_id, "cargo_type": cargo_type})
+        return CargoAcceptState(result)
+
+    async def query_get_stockpiled_cargo(self, industry_id: IndustryID, cargo_type: CargoType) -> int:
+        """Get the amount of cargo stockpiled for processing."""
+        return await self.control.query("get_stockpiled_cargo", params={"industry_id": industry_id, "cargo_type": cargo_type})
+
+    async def query_get_last_month_production(self, industry_id: IndustryID, cargo_type: CargoType) -> int:
+        """Get the total last economy-month's production of the given cargo at an industry."""
+        return await self.control.query("get_last_month_production", params={"industry_id": industry_id, "cargo_type": cargo_type})
+
+    async def query_get_last_month_transported(self, industry_id: IndustryID, cargo_type: CargoType) -> int:
+        """Get the total amount of cargo transported from an industry last economy-month."""
+        return await self.control.query("get_last_month_transported", params={"industry_id": industry_id, "cargo_type": cargo_type})
+
+    async def query_get_last_month_transported_percentage(self, industry_id: IndustryID, cargo_type: CargoType) -> int:
+        """Get the percentage of cargo transported from an industry last economy-month."""
+        return await self.control.query("get_last_month_transported_percentage", params={"industry_id": industry_id, "cargo_type": cargo_type})
+
+    async def query_get_industry_location(self, industry_id: IndustryID) -> TileIndex:
+        """Gets the location of the industry."""
+        return await self.control.query("get_industry_location", params={"industry_id": industry_id})
+
+    async def query_get_amount_of_stations_around(self, industry_id: IndustryID) -> int:
+        """Get the number of stations around an industry."""
+        return await self.control.query("get_amount_of_stations_around", params={"industry_id": industry_id})
+
+    async def query_get_distance_manhattan_to_tile(self, industry_id: IndustryID, tile: TileIndex) -> int:
+        """Get the manhattan distance from the tile to the industry."""
+        return await self.control.query("get_distance_manhattan_to_tile", params={"industry_id": industry_id, "tile": tile})
+
+    async def query_get_distance_square_to_tile(self, industry_id: IndustryID, tile: TileIndex) -> int:
+        """Get the square distance from the tile to the industry."""
+        return await self.control.query("get_distance_square_to_tile", params={"industry_id": industry_id, "tile": tile})
+
+    async def query_is_built_on_water(self, industry_id: IndustryID) -> bool:
+        """Is this industry built on water."""
+        return await self.control.query("is_built_on_water", params={"industry_id": industry_id})
+
+    async def query_has_heliport(self, industry_id: IndustryID) -> bool:
+        """Does this industry have a heliport?"""
+        return await self.control.query("has_heliport", params={"industry_id": industry_id})
+
+    async def query_get_heliport_location(self, industry_id: IndustryID) -> TileIndex:
+        """Gets the location of the industry's heliport."""
+        return await self.control.query("get_heliport_location", params={"industry_id": industry_id})
+
+    async def query_has_dock(self, industry_id: IndustryID) -> bool:
+        """Does this industry have a dock?"""
+        return await self.control.query("has_dock", params={"industry_id": industry_id})
+
+    async def query_get_dock_location(self, industry_id: IndustryID) -> TileIndex:
+        """Gets the location of the industry's dock."""
+        return await self.control.query("get_dock_location", params={"industry_id": industry_id})
+
+    async def query_get_industry_type(self, industry_id: IndustryID) -> IndustryType:
+        """Get the IndustryType of the industry."""
+        return await self.control.query("get_industry_type", params={"industry_id": industry_id})
+
+    async def query_get_exclusive_supplier(self, industry_id: IndustryID) -> CompanyID:
+        """Find out which company currently has the exclusive rights to deliver cargo to the industry."""
+        return await self.control.query("get_exclusive_supplier", params={"industry_id": industry_id})
+
+    async def query_get_exclusive_consumer(self, industry_id: IndustryID) -> CompanyID:
+        """Find out which company currently has the exclusive rights to take cargo from the industry."""
+        return await self.control.query("get_exclusive_consumer", params={"industry_id": industry_id})
+
+
+class IndustryTypeReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_is_valid_industry_type(self, industry_type: IndustryType) -> bool:
+        """Checks whether the given industry-type is valid."""
+        return await self.control.query("is_valid_industry_type", params={"industry_type": industry_type})
+
+    async def query_get_industry_type_name(self, industry_type: IndustryType) -> str:
+        """Get the name of an industry-type."""
+        return await self.control.query("get_industry_type_name", params={"industry_type": industry_type})
+
+    async def query_get_built_industries(self, industry_type: IndustryType) -> int:
+        """Get the number of industries of this type that have been built."""
+        return await self.control.query("get_built_industries", params={"industry_type": industry_type})
+
+    async def query_get_industry_type_production_cargo(self, industry_type: IndustryType, cargo_type: CargoType) -> bool:
+        """Check if this industry-type produces a specific cargo."""
+        return await self.control.query("get_industry_type_production_cargo", params={"industry_type": industry_type, "cargo_type": cargo_type})
+
+    async def query_get_industry_type_accepted_cargo(self, industry_type: IndustryType, cargo_type: CargoType) -> bool:
+        """Check if this industry-type accepts a specific cargo."""
+        return await self.control.query("get_industry_type_accepted_cargo", params={"industry_type": industry_type, "cargo_type": cargo_type})
+
+    async def query_get_industry_type_build_cost(self, industry_type: IndustryType) -> Money:
+        """Get the cost to build this type of industry."""
+        return await self.control.query("get_industry_type_build_cost", params={"industry_type": industry_type})
+
+
+class TownReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_get_town_count(self) -> int:
+        """Gets the number of towns."""
+        return await self.control.query("get_town_count")
+
+    async def query_is_valid_town(self, town_id: TownID) -> bool:
+        """Checks whether the given town index is valid."""
+        return await self.control.query("is_valid_town", params={"town_id": town_id})
+
+    async def query_get_town_name(self, town_id: TownID) -> str:
+        """Get the name of the town."""
+        return await self.control.query("get_town_name", params={"town_id": town_id})
+
+    async def query_get_population(self, town_id: TownID) -> int:
+        """Gets the number of inhabitants in the town."""
+        return await self.control.query("get_population", params={"town_id": town_id})
+
+    async def query_get_house_count(self, town_id: TownID) -> int:
+        """Gets the number of houses in the town."""
+        return await self.control.query("get_house_count", params={"town_id": town_id})
+
+    async def query_get_town_location(self, town_id: TownID) -> TileIndex:
+        """Gets the location of the town."""
+        return await self.control.query("get_town_location", params={"town_id": town_id})
+
+    async def query_get_town_last_month_production(self, town_id: TownID, cargo_type: CargoType) -> int:
+        """Get the total last economy-month's production of the given cargo at a town."""
+        return await self.control.query("get_town_last_month_production", params={"town_id": town_id, "cargo_type": cargo_type})
+
+    async def query_get_last_month_supplied(self, town_id: TownID, cargo_type: CargoType) -> int:
+        """Get the total amount of cargo supplied from a town last economy-month."""
+        return await self.control.query("get_last_month_supplied", params={"town_id": town_id, "cargo_type": cargo_type})
+
+    async def query_get_town_last_month_transported_percentage(self, town_id: TownID, cargo_type: CargoType) -> int:
+        """Get the percentage of transported production of the given cargo at a town last economy-month."""
+        return await self.control.query("get_town_last_month_transported_percentage", params={"town_id": town_id, "cargo_type": cargo_type})
+
+    async def query_get_last_month_received(self, town_id: TownID, towneffect_id: TownEffect) -> int:
+        """Get the total amount of cargo effects received by a town last economy-month."""
+        return await self.control.query("get_last_month_received", params={"town_id": town_id, "towneffect_id": towneffect_id.value})
+
+    async def query_get_cargo_goal(self, town_id: TownID, towneffect_id: TownEffect) -> int:
+        """Get the amount of cargo per economy-month that needs to be delivered for a town to grow."""
+        return await self.control.query("get_cargo_goal", params={"town_id": town_id, "towneffect_id": towneffect_id.value})
+
+    async def query_get_growth_rate(self, town_id: TownID) -> int:
+        """Get the amount of economy-days between town growth."""
+        return await self.control.query("get_growth_rate", params={"town_id": town_id})
+
+    async def query_get_town_distance_manhattan_to_tile(self, town_id: TownID, tile: TileIndex) -> int:
+        """Get the manhattan distance from the tile to the town location."""
+        return await self.control.query("get_town_distance_manhattan_to_tile", params={"town_id": town_id, "tile": tile})
+
+    async def query_get_town_distance_square_to_tile(self, town_id: TownID, tile: TileIndex) -> int:
+        """Get the square distance from the tile to the town location."""
+        return await self.control.query("get_town_distance_square_to_tile", params={"town_id": town_id, "tile": tile})
+
+    async def query_is_within_town_influence(self, town_id: TownID, tile: TileIndex) -> bool:
+        """Find out if this tile is within the rating influence of a town."""
+        return await self.control.query("is_within_town_influence", params={"town_id": town_id, "tile": tile})
+
+    async def query_has_statue(self, town_id: TownID) -> bool:
+        """Find out if this town has a statue for the current company."""
+        return await self.control.query("has_statue", params={"town_id": town_id})
+
+    async def query_is_city(self, town_id: TownID) -> bool:
+        """Find out if the town is a city."""
+        return await self.control.query("is_city", params={"town_id": town_id})
+
+    async def query_get_road_rework_duration(self, town_id: TownID) -> int:
+        """Find out how long the town is undergoing road reconstructions."""
+        return await self.control.query("get_road_rework_duration", params={"town_id": town_id})
+
+    async def query_get_fund_buildings_duration(self, town_id: TownID) -> int:
+        """Find out how long new buildings are still being funded in a town."""
+        return await self.control.query("get_fund_buildings_duration", params={"town_id": town_id})
+
+    async def query_get_exclusive_rights_company(self, town_id: TownID) -> CompanyID:
+        """Find out which company currently has the exclusive rights of this town."""
+        return await self.control.query("get_exclusive_rights_company", params={"town_id": town_id})
+
+    async def query_get_exclusive_rights_duration(self, town_id: TownID) -> int:
+        """Find out how long the town is under influence of the exclusive rights."""
+        return await self.control.query("get_exclusive_rights_duration", params={"town_id": town_id})
+
+    async def query_is_action_available(self, town_id: TownID, town_action: TownAction) -> bool:
+        """Find out if an action can currently be performed on the town."""
+        return await self.control.query("is_action_available", params={"town_id": town_id, "town_action": town_action.value})
+
+    async def perform_town_action(self, town_id: TownID, town_action: TownAction) -> bool:
+        """Perform a town action on this town."""
+        return await self.control.query("perform_town_action", params={"town_id": town_id, "town_action": town_action.value})
+
+    async def query_get_rating(self, town_id: TownID, company_id: CompanyID) -> TownRating:
+        """Get the rating of a company within a town."""
+        result = await self.control.query("get_rating", params={"town_id": town_id, "company_id": company_id})
+        return TownRating(result)
+
+    async def query_get_allowed_noise(self, town_id: TownID) -> int:
+        """Get the maximum level of noise that still can be added by airports."""
+        return await self.control.query("get_allowed_noise", params={"town_id": town_id})
+
+    async def query_get_road_layout(self, town_id: TownID) -> RoadLayout:
+        """Get the road layout for a town."""
+        result = await self.control.query("get_road_layout", params={"town_id": town_id})
+        return RoadLayout(result)
+
+    async def found_town(self, tile: TileIndex, size: TownSize, city: bool, layout: RoadLayout, name: str) -> bool:
+        """Found a new town."""
+        return await self.control.query("found_town", params={"tile": tile, "size": size.value, "city": city, "layout": layout.value, "name": name})
+
+
+class OrderReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_is_valid_vehicle_order(self, vehicle_id: VehicleID, order_position: OrderPosition) -> bool:
+        """Checks whether the given order id is valid for the given vehicle."""
+        return await self.control.query("is_valid_vehicle_order", params={"vehicle_id": vehicle_id, "order_position": order_position})
+
+    async def query_get_order_count(self, vehicle_id: VehicleID) -> int:
+        """Returns the number of orders for the given vehicle."""
+        return await self.control.query("get_order_count", params={"vehicle_id": vehicle_id})
+
+    async def query_get_order_destination(self, vehicle_id: VehicleID, order_position: OrderPosition) -> TileIndex:
+        """Gets the destination of the given order for the given vehicle."""
+        return await self.control.query("get_order_destination", params={"vehicle_id": vehicle_id, "order_position": order_position})
+
+    async def append_order(self, vehicle_id: VehicleID, destination: TileIndex, order_flags: int) -> bool:
+        """Appends an order to the end of the vehicle's order list."""
+        return await self.control.query("append_order", params={"vehicle_id": vehicle_id, "destination": destination, "order_flags": order_flags})
+
+    async def insert_order(self, vehicle_id: VehicleID, order_position: OrderPosition, destination: TileIndex, order_flags: int) -> bool:
+        """Inserts an order before the given order_position."""
+        return await self.control.query("insert_order", params={"vehicle_id": vehicle_id, "order_position": order_position, "destination": destination, "order_flags": order_flags})
+
+    async def remove_order(self, vehicle_id: VehicleID, order_position: OrderPosition) -> bool:
+        """Removes an order from the vehicle's order list."""
+        return await self.control.query("remove_order", params={"vehicle_id": vehicle_id, "order_position": order_position})
+
+    async def skip_to_order(self, vehicle_id: VehicleID, next_order: OrderPosition) -> bool:
+        """Make a vehicle execute next_order instead of its current order."""
+        return await self.control.query("skip_to_order", params={"vehicle_id": vehicle_id, "next_order": next_order})
+
+    async def move_order(self, vehicle_id: VehicleID, order_position_move: OrderPosition, order_position_target: OrderPosition) -> bool:
+        """Move an order inside the orderlist."""
+        return await self.control.query("move_order", params={"vehicle_id": vehicle_id, "order_position_move": order_position_move, "order_position_target": order_position_target})
+
+    async def copy_orders(self, vehicle_id: VehicleID, main_vehicle_id: VehicleID) -> bool:
+        """Copies the orders from another vehicle."""
+        return await self.control.query("copy_orders", params={"vehicle_id": vehicle_id, "main_vehicle_id": main_vehicle_id})
+
+    async def share_orders(self, vehicle_id: VehicleID, main_vehicle_id: VehicleID) -> bool:
+        """Shares the orders between two vehicles."""
+        return await self.control.query("share_orders", params={"vehicle_id": vehicle_id, "main_vehicle_id": main_vehicle_id})
+
+    async def unshare_orders(self, vehicle_id: VehicleID) -> bool:
+        """Removes the given vehicle from a shared orders list."""
+        return await self.control.query("unshare_orders", params={"vehicle_id": vehicle_id})
+
+    async def query_get_order_distance(self, vehicle_type: VehicleType, origin_tile: TileIndex, dest_tile: TileIndex) -> int:
+        """Get the distance between two points for a vehicle type."""
+        return await self.control.query("get_order_distance", params={"vehicle_type": vehicle_type.value, "origin_tile": origin_tile, "dest_tile": dest_tile})
+
+
+class VehicleReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_is_valid_vehicle(self, vehicle_id: VehicleID) -> bool:
+        """Checks whether the given vehicle is valid."""
+        return await self.control.query("is_valid_vehicle", params={"vehicle_id": vehicle_id})
+
+    async def query_is_primary_vehicle(self, vehicle_id: VehicleID) -> bool:
+        """Checks whether the given vehicle is a primary vehicle."""
+        return await self.control.query("is_primary_vehicle", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_name(self, vehicle_id: VehicleID) -> str:
+        """Get the name of a vehicle."""
+        return await self.control.query("get_vehicle_name", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_type(self, vehicle_id: VehicleID) -> VehicleType:
+        """Get the type of a vehicle."""
+        result = await self.control.query("get_vehicle_vehicle_type", params={"vehicle_id": vehicle_id})
+        return VehicleType(result)
+
+    async def query_get_engine_type(self, vehicle_id: VehicleID) -> EngineID:
+        """Get the EngineID of a vehicle."""
+        return await self.control.query("get_engine_type", params={"vehicle_id": vehicle_id})
+
+    async def query_get_unit_number(self, vehicle_id: VehicleID) -> int:
+        """Get the unit number of a vehicle."""
+        return await self.control.query("get_unit_number", params={"vehicle_id": vehicle_id})
+
+    async def query_get_current_speed(self, vehicle_id: VehicleID) -> int:
+        """Get the current speed of a vehicle."""
+        return await self.control.query("get_current_speed", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_location(self, vehicle_id: VehicleID) -> TileIndex:
+        """Get the location of a vehicle."""
+        return await self.control.query("get_vehicle_location", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_profit_this_year(self, vehicle_id: VehicleID) -> Money:
+        """Get the profit this year of a vehicle."""
+        return await self.control.query("get_vehicle_profit_this_year", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_profit_last_year(self, vehicle_id: VehicleID) -> Money:
+        """Get the profit last year of a vehicle."""
+        return await self.control.query("get_vehicle_profit_last_year", params={"vehicle_id": vehicle_id})
+
+    async def query_get_current_value(self, vehicle_id: VehicleID) -> Money:
+        """Get the current value of a vehicle."""
+        return await self.control.query("get_current_value", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_age(self, vehicle_id: VehicleID) -> int:
+        """Get the age of a vehicle."""
+        return await self.control.query("get_vehicle_age", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_max_age(self, vehicle_id: VehicleID) -> int:
+        """Get the max age of a vehicle."""
+        return await self.control.query("get_vehicle_max_age", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_capacity(self, vehicle_id: VehicleID) -> int:
+        """Get the capacity of a vehicle."""
+        return await self.control.query("get_vehicle_capacity", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_cargo_type(self, vehicle_id: VehicleID) -> CargoType:
+        """Get the cargo type of a vehicle."""
+        return await self.control.query("get_vehicle_cargo_type", params={"vehicle_id": vehicle_id})
+
+    async def query_get_cargo_load(self, vehicle_id: VehicleID) -> int:
+        """Get the current cargo load of a vehicle."""
+        return await self.control.query("get_cargo_load", params={"vehicle_id": vehicle_id})
+
+    async def query_get_group_id(self, vehicle_id: VehicleID) -> GroupID:
+        """Get the GroupID of a vehicle."""
+        return await self.control.query("get_group_id", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_max_speed(self, vehicle_id: VehicleID) -> int:
+        """Get the max speed of a vehicle."""
+        return await self.control.query("get_vehicle_max_speed", params={"vehicle_id": vehicle_id})
+
+    async def build_vehicle(self, depot: TileIndex, engine_id: EngineID) -> VehicleID:
+        """Build a vehicle in the depot."""
+        return await self.control.query("build_vehicle", params={"depot": depot, "engine_id": engine_id})
+
+    async def sell_vehicle(self, vehicle_id: VehicleID) -> bool:
+        """Sell a vehicle."""
+        return await self.control.query("sell_vehicle", params={"vehicle_id": vehicle_id})
+
+    async def send_vehicle_to_depot(self, vehicle_id: VehicleID) -> bool:
+        """Send a vehicle to a depot."""
+        return await self.control.query("send_vehicle_to_depot", params={"vehicle_id": vehicle_id})
+
+    async def start_stop_vehicle(self, vehicle_id: VehicleID) -> bool:
+        """Start or stop a vehicle."""
+        return await self.control.query("start_stop_vehicle", params={"vehicle_id": vehicle_id})
+
+    async def clone_vehicle(self, tile: TileIndex, vehicle_id: VehicleID, share_orders: bool) -> VehicleID:
+        """Clone a vehicle."""
+        return await self.control.query("clone_vehicle", params={"tile": tile, "vehicle_id": vehicle_id, "share_orders": share_orders})
+
+    async def refit_vehicle(self, vehicle_id: VehicleID, cargo_type: CargoType) -> bool:
+        """Refit a vehicle to carry the given cargo."""
+        return await self.control.query("refit_vehicle", params={"vehicle_id": vehicle_id, "cargo_type": cargo_type})
+
+    async def query_get_max_order_distance(self, vehicle_id: VehicleID) -> int:
+        """Get the maximum allowed distance between two orders for a vehicle."""
+        return await self.control.query("get_max_order_distance", params={"vehicle_id": vehicle_id})
+
+    async def query_is_in_depot(self, vehicle_id: VehicleID) -> bool:
+        """Check if the vehicle is in a depot."""
+        return await self.control.query("is_in_depot", params={"vehicle_id": vehicle_id})
+
+    async def query_is_stopped_in_depot(self, vehicle_id: VehicleID) -> bool:
+        """Check if the vehicle is stopped in a depot."""
+        return await self.control.query("is_stopped_in_depot", params={"vehicle_id": vehicle_id})
+
+    async def query_has_shared_orders(self, vehicle_id: VehicleID) -> bool:
+        """Check if the vehicle has shared orders."""
+        return await self.control.query("has_shared_orders", params={"vehicle_id": vehicle_id})
+
+    async def query_get_vehicle_running_cost(self, vehicle_id: VehicleID) -> Money:
+        """Get the running cost of a vehicle."""
+        return await self.control.query("get_vehicle_running_cost", params={"vehicle_id": vehicle_id})
+
+
+class RailReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_is_rail_type_available(self, railtype: RailType) -> bool:
+        """Checks whether the given rail type is available."""
+        return await self.control.query("is_rail_type_available", params={"railtype": railtype})
+
+    async def query_build_rail(self, tile: TileIndex, track_rail_type: RailType) -> bool:
+        """Build rail on a tile."""
+        return await self.control.query("build_rail", params={"tile": tile, "track_rail_type": track_rail_type})
+
+    async def query_remove_rail(self, tile: TileIndex, track_rail_type: RailType) -> bool:
+        """Remove rail from a tile."""
+        return await self.control.query("remove_rail", params={"tile": tile, "track_rail_type": track_rail_type})
+
+    async def query_build_signal(self, tile: TileIndex, signal_type: int) -> bool:
+        """Build a signal on a tile."""
+        return await self.control.query("build_signal", params={"tile": tile, "signal_type": signal_type})
+
+    async def query_get_signal_type(self, tile: TileIndex) -> int:
+        """Get the signal type of a tile."""
+        return await self.control.query("get_signal_type", params={"tile": tile})
+
+    async def query_build_train_depot(self, tile: TileIndex, front: TileIndex) -> bool:
+        """Build a train depot."""
+        return await self.control.query("build_train_depot", params={"tile": tile, "front": front})
+
+    async def query_build_rail_station(self, tile: TileIndex, direction: int, num_platforms: int, station_length: int, station_id: StationID) -> bool:
+        """Build a rail station."""
+        return await self.control.query("build_rail_station", params={"tile": tile, "direction": direction, "num_platforms": num_platforms, "station_length": station_length, "station_id": station_id})
+
+
+class RoadReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_is_road_type_available(self, roadtype: RoadType) -> bool:
+        """Checks whether the given road type is available."""
+        return await self.control.query("is_road_type_available", params={"roadtype": roadtype})
+
+    async def query_build_road(self, tile: TileIndex, roadtype: RoadType) -> bool:
+        """Build road on a tile."""
+        return await self.control.query("build_road", params={"tile": tile, "roadtype": roadtype})
+
+    async def query_remove_road(self, tile: TileIndex, roadtype: RoadType) -> bool:
+        """Remove road from a tile."""
+        return await self.control.query("remove_road", params={"tile": tile, "roadtype": roadtype})
+
+    async def query_build_road_depot(self, tile: TileIndex, front: TileIndex) -> bool:
+        """Build a road depot."""
+        return await self.control.query("build_road_depot", params={"tile": tile, "front": front})
+
+    async def query_build_bus_station(self, tile: TileIndex, direction: int, station_id: StationID) -> bool:
+        """Build a bus station."""
+        return await self.control.query("build_bus_station", params={"tile": tile, "direction": direction, "station_id": station_id})
+
+    async def query_build_truck_station(self, tile: TileIndex, direction: int, station_id: StationID) -> bool:
+        """Build a truck station."""
+        return await self.control.query("build_truck_station", params={"tile": tile, "direction": direction, "station_id": station_id})
+
+
+class TileReq:
+
+    control: OpenttdControl
+
+    def __init__(self, control: OpenttdControl) -> None:
+        self.control = control
+
+    async def query_get_corner_height(self, tile: TileIndex, corner: int) -> int:
+        """Get the height of a tile at a given corner."""
+        return await self.control.query("get_corner_height", params={"tile": tile, "corner": corner})
+
+    async def query_get_slope(self, tile: TileIndex) -> int:
+        """Get the slope of a tile."""
+        return await self.control.query("get_slope", params={"tile": tile})
+
+    async def query_is_buildable(self, tile: TileIndex) -> bool:
+        """Checks whether a tile is buildable."""
+        return await self.control.query("is_buildable", params={"tile": tile})
+
+    async def query_has_tree_on_tile(self, tile: TileIndex) -> bool:
+        """Checks whether a tile has a tree on it."""
+        return await self.control.query("has_tree_on_tile", params={"tile": tile})
+
+    async def query_is_sea_tile(self, tile: TileIndex) -> bool:
+        """Checks whether the given tile is sea."""
+        return await self.control.query("is_sea_tile", params={"tile": tile})
+
+    async def query_is_river_tile(self, tile: TileIndex) -> bool:
+        """Checks whether the given tile is a river."""
+        return await self.control.query("is_river_tile", params={"tile": tile})
+
+    async def query_is_water_tile(self, tile: TileIndex) -> bool:
+        """Checks whether the given tile is water."""
+        return await self.control.query("is_water_tile", params={"tile": tile})
+
+    async def query_is_station_tile(self, tile: TileIndex) -> bool:
+        """Checks whether the given tile is a station tile."""
+        return await self.control.query("is_station_tile", params={"tile": tile})
+
+    async def query_is_demolishable(self, tile: TileIndex) -> bool:
+        """Checks whether the given tile can be demolished."""
+        return await self.control.query("is_demolishable", params={"tile": tile})
+
+    async def demolish_tile(self, tile: TileIndex) -> bool:
+        """Demolish a tile."""
+        return await self.control.query("demolish_tile", params={"tile": tile})
+
+    async def query_raise_tile(self, tile: TileIndex) -> bool:
+        """Raise a tile."""
+        return await self.control.query("raise_tile", params={"tile": tile})
+
+    async def query_lower_tile(self, tile: TileIndex) -> bool:
+        """Lower a tile."""
+        return await self.control.query("lower_tile", params={"tile": tile})
+
+    async def query_plant_tree(self, tile: TileIndex) -> bool:
+        """Plant a tree on a tile."""
+        return await self.control.query("plant_tree", params={"tile": tile})

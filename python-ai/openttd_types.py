@@ -124,6 +124,13 @@ class WaypointType(Enum):
 
 type GroupID = int
 type ObjectType = int
+type IndustryType = int
+
+
+class CargoAcceptState(Enum):
+    CAS_NOT_ACCEPTED = 0  # The CargoType is not accepted by this industry.
+    CAS_ACCEPTED = 1  # The industry currently accepts this CargoType.
+    CAS_TEMP_REFUSED = 2  # The industry temporarily refuses to accept this CargoType.
 
 
 class BuildType(Enum):
@@ -132,6 +139,48 @@ class BuildType(Enum):
     BT_BUOY = 2  # Build a buoy.
     BT_LOCK = 3  # Build a lock.
     BT_CANAL = 4  # Build a canal.
+
+
+class TownAction(Enum):
+    TOWN_ACTION_ADVERTISE_SMALL = 0  # Small advertisement campaign.
+    TOWN_ACTION_ADVERTISE_MEDIUM = 1  # Medium advertisement campaign.
+    TOWN_ACTION_ADVERTISE_LARGE = 2  # Large advertisement campaign.
+    TOWN_ACTION_ROAD_REBUILD = 3  # Rebuild the roads.
+    TOWN_ACTION_BUILD_STATUE = 4  # Build a statue.
+    TOWN_ACTION_FUND_BUILDINGS = 5  # Fund the creation of extra buildings.
+    TOWN_ACTION_BUY_RIGHTS = 6  # Buy exclusive rights.
+    TOWN_ACTION_BRIBE = 7  # Bribe the town.
+
+
+class TownRating(Enum):
+    TOWN_RATING_NONE = 0
+    TOWN_RATING_APPALLING = 1
+    TOWN_RATING_VERY_POOR = 2
+    TOWN_RATING_POOR = 3
+    TOWN_RATING_MEDIOCRE = 4
+    TOWN_RATING_GOOD = 5
+    TOWN_RATING_VERY_GOOD = 6
+    TOWN_RATING_EXCELLENT = 7
+    TOWN_RATING_OUTSTANDING = 8
+    TOWN_RATING_INVALID = 9
+
+
+class RoadLayout(Enum):
+    ROAD_LAYOUT_ORIGINAL = 0
+    ROAD_LAYOUT_BETTER_ROADS = 1
+    ROAD_LAYOUT_2x2 = 2
+    ROAD_LAYOUT_3x3 = 3
+    ROAD_LAYOUT_RANDOM = 4
+    ROAD_LAYOUT_INVALID = 5
+
+
+class TownSize(Enum):
+    TOWN_SIZE_SMALL = 0
+    TOWN_SIZE_MEDIUM = 1
+    TOWN_SIZE_LARGE = 2
+    TOWN_SIZE_INVALID = 3
+
+type OrderPosition = int
 
 
 class ErrorCategories(Enum):

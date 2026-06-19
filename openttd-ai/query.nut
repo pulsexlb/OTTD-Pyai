@@ -200,7 +200,7 @@ function Query(key, params) {
             return AIBridge.GetName(params.bridge_type.tointeger(), params.vehicle_type.tointeger());
             break;
         }
-        case "get_max_speed": {
+        case "get_bridge_max_speed": {
             return AIBridge.GetMaxSpeed(params.bridge_type.tointeger());
             break;
         }
@@ -340,7 +340,7 @@ function Query(key, params) {
             return AIEngine.GetPower(params.engine_id.tointeger());
             break;
         }
-        case "get_weight": {
+        case "get_engine_weight": {
             return AIEngine.GetWeight(params.engine_id.tointeger());
             break;
         }
@@ -780,5 +780,488 @@ function Query(key, params) {
             return AIObjectType.ResolveNewGRFID(params.grfid.tointeger(), params.grf_local_id.tointeger());
             break;
         }
+        case "get_industry_count": {
+            return AIIndustry.GetIndustryCount();
+            break;
+        }
+        case "is_valid_industry": {
+            return AIIndustry.IsValidIndustry(params.industry_id.tointeger());
+            break;
+        }
+        case "get_industry_id": {
+            return AIIndustry.GetIndustryID(params.tile.tointeger());
+            break;
+        }
+        case "get_industry_name": {
+            return AIIndustry.GetName(params.industry_id.tointeger());
+            break;
+        }
+        case "is_cargo_accepted": {
+            return AIIndustry.IsCargoAccepted(params.industry_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_stockpiled_cargo": {
+            return AIIndustry.GetStockpiledCargo(params.industry_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_last_month_production": {
+            return AIIndustry.GetLastMonthProduction(params.industry_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_last_month_transported": {
+            return AIIndustry.GetLastMonthTransported(params.industry_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_last_month_transported_percentage": {
+            return AIIndustry.GetLastMonthTransportedPercentage(params.industry_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_industry_location": {
+            return AIIndustry.GetLocation(params.industry_id.tointeger());
+            break;
+        }
+        case "get_amount_of_stations_around": {
+            return AIIndustry.GetAmountOfStationsAround(params.industry_id.tointeger());
+            break;
+        }
+        case "get_distance_manhattan_to_tile": {
+            return AIIndustry.GetDistanceManhattanToTile(params.industry_id.tointeger(), params.tile.tointeger());
+            break;
+        }
+        case "get_distance_square_to_tile": {
+            return AIIndustry.GetDistanceSquareToTile(params.industry_id.tointeger(), params.tile.tointeger());
+            break;
+        }
+        case "is_built_on_water": {
+            return AIIndustry.IsBuiltOnWater(params.industry_id.tointeger());
+            break;
+        }
+        case "has_heliport": {
+            return AIIndustry.HasHeliport(params.industry_id.tointeger());
+            break;
+        }
+        case "get_heliport_location": {
+            return AIIndustry.GetHeliportLocation(params.industry_id.tointeger());
+            break;
+        }
+        case "has_dock": {
+            return AIIndustry.HasDock(params.industry_id.tointeger());
+            break;
+        }
+        case "get_dock_location": {
+            return AIIndustry.GetDockLocation(params.industry_id.tointeger());
+            break;
+        }
+        case "get_industry_type": {
+            return AIIndustry.GetIndustryType(params.industry_id.tointeger());
+            break;
+        }
+        case "get_exclusive_supplier": {
+            return AIIndustry.GetExclusiveSupplier(params.industry_id.tointeger());
+            break;
+        }
+        case "get_exclusive_consumer": {
+            return AIIndustry.GetExclusiveConsumer(params.industry_id.tointeger());
+            break;
+        }
+        case "is_valid_industry_type": {
+            return AIIndustryType.IsValidIndustryType(params.industry_type.tointeger());
+            break;
+        }
+        case "get_industry_type_name": {
+            return AIIndustryType.GetName(params.industry_type.tointeger());
+            break;
+        }
+        case "get_built_industries": {
+            return AIIndustryType.GetBuiltIndustries(params.industry_type.tointeger());
+            break;
+        }
+        case "get_industry_type_production_cargo": {
+            return AIIndustryType.ProducesCargo(params.industry_type.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_industry_type_accepted_cargo": {
+            return AIIndustryType.AcceptsCargo(params.industry_type.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_industry_type_build_cost": {
+            return AIIndustryType.GetBuildCost(params.industry_type.tointeger());
+            break;
+        }
+        case "get_town_count": {
+            return AITown.GetTownCount();
+            break;
+        }
+        case "is_valid_town": {
+            return AITown.IsValidTown(params.town_id.tointeger());
+            break;
+        }
+        case "get_town_name": {
+            return AITown.GetName(params.town_id.tointeger());
+            break;
+        }
+        case "get_population": {
+            return AITown.GetPopulation(params.town_id.tointeger());
+            break;
+        }
+        case "get_house_count": {
+            return AITown.GetHouseCount(params.town_id.tointeger());
+            break;
+        }
+        case "get_town_location": {
+            return AITown.GetLocation(params.town_id.tointeger());
+            break;
+        }
+        case "get_last_month_supplied": {
+            return AITown.GetLastMonthSupplied(params.town_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_town_last_month_transported_percentage": {
+            return AITown.GetLastMonthTransportedPercentage(params.town_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_last_month_received": {
+            return AITown.GetLastMonthReceived(params.town_id.tointeger(), params.towneffect_id.tointeger());
+            break;
+        }
+        case "get_cargo_goal": {
+            return AITown.GetCargoGoal(params.town_id.tointeger(), params.towneffect_id.tointeger());
+            break;
+        }
+        case "get_growth_rate": {
+            return AITown.GetGrowthRate(params.town_id.tointeger());
+            break;
+        }
+        case "get_town_last_month_production": {
+            return AITown.GetLastMonthProduction(params.town_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_town_distance_manhattan_to_tile": {
+            return AITown.GetDistanceManhattanToTile(params.town_id.tointeger(), params.tile.tointeger());
+            break;
+        }
+        case "get_town_distance_square_to_tile": {
+            return AITown.GetDistanceSquareToTile(params.town_id.tointeger(), params.tile.tointeger());
+            break;
+        }
+        case "is_within_town_influence": {
+            return AITown.IsWithinTownInfluence(params.town_id.tointeger(), params.tile.tointeger());
+            break;
+        }
+        case "has_statue": {
+            return AITown.HasStatue(params.town_id.tointeger());
+            break;
+        }
+        case "is_city": {
+            return AITown.IsCity(params.town_id.tointeger());
+            break;
+        }
+        case "get_road_rework_duration": {
+            return AITown.GetRoadReworkDuration(params.town_id.tointeger());
+            break;
+        }
+        case "get_fund_buildings_duration": {
+            return AITown.GetFundBuildingsDuration(params.town_id.tointeger());
+            break;
+        }
+        case "get_exclusive_rights_company": {
+            return AITown.GetExclusiveRightsCompany(params.town_id.tointeger());
+            break;
+        }
+        case "get_exclusive_rights_duration": {
+            return AITown.GetExclusiveRightsDuration(params.town_id.tointeger());
+            break;
+        }
+        case "is_action_available": {
+            return AITown.IsActionAvailable(params.town_id.tointeger(), params.town_action.tointeger());
+            break;
+        }
+        case "perform_town_action": {
+            return AITown.PerformTownAction(params.town_id.tointeger(), params.town_action.tointeger());
+            break;
+        }
+        case "get_rating": {
+            return AITown.GetRating(params.town_id.tointeger(), params.company_id.tointeger());
+            break;
+        }
+        case "get_allowed_noise": {
+            return AITown.GetAllowedNoise(params.town_id.tointeger());
+            break;
+        }
+        case "get_road_layout": {
+            return AITown.GetRoadLayout(params.town_id.tointeger());
+            break;
+        }
+        case "found_town": {
+            return AITown.FoundTown(params.tile.tointeger(), params.size.tointeger(), params.city.tointeger(), params.layout.tointeger(), params.name);
+            break;
+        }
+        case "is_valid_vehicle_order": {
+            return AIOrder.IsValidVehicleOrder(params.vehicle_id.tointeger(), params.order_position.tointeger());
+            break;
+        }
+        case "get_order_count": {
+            return AIOrder.GetOrderCount(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_order_destination": {
+            return AIOrder.GetOrderDestination(params.vehicle_id.tointeger(), params.order_position.tointeger());
+            break;
+        }
+        case "append_order": {
+            return AIOrder.AppendOrder(params.vehicle_id.tointeger(), params.destination.tointeger(), params.order_flags.tointeger());
+            break;
+        }
+        case "insert_order": {
+            return AIOrder.InsertOrder(params.vehicle_id.tointeger(), params.order_position.tointeger(), params.destination.tointeger(), params.order_flags.tointeger());
+            break;
+        }
+        case "remove_order": {
+            return AIOrder.RemoveOrder(params.vehicle_id.tointeger(), params.order_position.tointeger());
+            break;
+        }
+        case "skip_to_order": {
+            return AIOrder.SkipToOrder(params.vehicle_id.tointeger(), params.next_order.tointeger());
+            break;
+        }
+        case "move_order": {
+            return AIOrder.MoveOrder(params.vehicle_id.tointeger(), params.order_position_move.tointeger(), params.order_position_target.tointeger());
+            break;
+        }
+        case "copy_orders": {
+            return AIOrder.CopyOrders(params.vehicle_id.tointeger(), params.main_vehicle_id.tointeger());
+            break;
+        }
+        case "share_orders": {
+            return AIOrder.ShareOrders(params.vehicle_id.tointeger(), params.main_vehicle_id.tointeger());
+            break;
+        }
+        case "unshare_orders": {
+            return AIOrder.UnshareOrders(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_order_distance": {
+            return AIOrder.GetOrderDistance(params.vehicle_type.tointeger(), params.origin_tile.tointeger(), params.dest_tile.tointeger());
+            break;
+        }
+        case "is_valid_vehicle": {
+            return AIVehicle.IsValidVehicle(params.vehicle_id.tointeger());
+            break;
+        }
+        case "is_primary_vehicle": {
+            return AIVehicle.IsPrimaryVehicle(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_name": {
+            return AIVehicle.GetName(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_engine_type": {
+            return AIVehicle.GetEngineType(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_unit_number": {
+            return AIVehicle.GetUnitNumber(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_current_speed": {
+            return AIVehicle.GetCurrentSpeed(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_profit_this_year": {
+            return AIVehicle.GetProfitThisYear(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_profit_last_year": {
+            return AIVehicle.GetProfitLastYear(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_current_value": {
+            return AIVehicle.GetCurrentValue(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_age": {
+            return AIVehicle.GetAge(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_cargo_load": {
+            return AIVehicle.GetCargoLoad(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_group_id": {
+            return AIVehicle.GetGroupID(params.vehicle_id.tointeger());
+            break;
+        }
+        case "build_vehicle": {
+            return AIVehicle.BuildVehicle(params.depot.tointeger(), params.engine_id.tointeger());
+            break;
+        }
+        case "get_vehicle_location": {
+            return AIVehicle.GetLocation(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_vehicle_type": {
+            return AIVehicle.GetVehicleType(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_max_age": {
+            return AIVehicle.GetMaxAge(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_capacity": {
+            return AIVehicle.GetCapacity(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_cargo_type": {
+            return AIVehicle.GetCargoType(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_max_speed": {
+            return AIVehicle.GetMaxSpeed(params.vehicle_id.tointeger());
+            break;
+        }
+        case "sell_vehicle": {
+            return AIVehicle.SellVehicle(params.vehicle_id.tointeger());
+            break;
+        }
+        case "send_vehicle_to_depot": {
+            return AIVehicle.SendVehicleToDepot(params.vehicle_id.tointeger());
+            break;
+        }
+        case "start_stop_vehicle": {
+            return AIVehicle.StartStopVehicle(params.vehicle_id.tointeger());
+            break;
+        }
+        case "clone_vehicle": {
+            return AIVehicle.CloneVehicle(params.tile.tointeger(), params.vehicle_id.tointeger(), params.share_orders.tointeger());
+            break;
+        }
+        case "refit_vehicle": {
+            return AIVehicle.RefitVehicle(params.vehicle_id.tointeger(), params.cargo_type.tointeger());
+            break;
+        }
+        case "get_max_order_distance": {
+            return AIVehicle.GetMaximumOrderDistance(params.vehicle_id.tointeger());
+            break;
+        }
+        case "is_in_depot": {
+            return AIVehicle.IsInDepot(params.vehicle_id.tointeger());
+            break;
+        }
+        case "is_stopped_in_depot": {
+            return AIVehicle.IsStoppedInDepot(params.vehicle_id.tointeger());
+            break;
+        }
+        case "has_shared_orders": {
+            return AIVehicle.HasSharedOrders(params.vehicle_id.tointeger());
+            break;
+        }
+        case "get_vehicle_running_cost": {
+            return AIVehicle.GetRunningCost(params.vehicle_id.tointeger());
+            break;
+        }
+        case "is_rail_type_available": {
+            return AIRail.IsRailTypeAvailable(params.railtype.tointeger());
+            break;
+        }
+        case "build_rail": {
+            return AIRail.BuildRail(params.tile.tointeger(), params.track_rail_type.tointeger());
+            break;
+        }
+        case "remove_rail": {
+            return AIRail.RemoveRail(params.tile.tointeger(), params.track_rail_type.tointeger());
+            break;
+        }
+        case "build_signal": {
+            return AIRail.BuildSignal(params.tile.tointeger(), params.signal_type.tointeger());
+            break;
+        }
+        case "get_signal_type": {
+            return AIRail.GetSignalType(params.tile.tointeger());
+            break;
+        }
+        case "build_train_depot": {
+            return AIRail.BuildTrainDepot(params.tile.tointeger(), params.front.tointeger());
+            break;
+        }
+        case "build_rail_station": {
+            return AIRail.BuildRailStation(params.tile.tointeger(), params.direction.tointeger(), params.num_platforms.tointeger(), params.station_length.tointeger(), params.station_id.tointeger());
+            break;
+        }
+        case "is_road_type_available": {
+            return AIRoad.IsRoadTypeAvailable(params.roadtype.tointeger());
+            break;
+        }
+        case "build_road": {
+            return AIRoad.BuildRoad(params.tile.tointeger(), params.roadtype.tointeger());
+            break;
+        }
+        case "remove_road": {
+            return AIRoad.RemoveRoad(params.tile.tointeger(), params.roadtype.tointeger());
+            break;
+        }
+        case "build_road_depot": {
+            return AIRoad.BuildRoadDepot(params.tile.tointeger(), params.front.tointeger());
+            break;
+        }
+        case "build_bus_station": {
+            return AIRoad.BuildBusStation(params.tile.tointeger(), params.direction.tointeger(), params.station_id.tointeger());
+            break;
+        }
+        case "build_truck_station": {
+            return AIRoad.BuildTruckStation(params.tile.tointeger(), params.direction.tointeger(), params.station_id.tointeger());
+            break;
+        }
+        case "get_corner_height": {
+            return AITile.GetCornerHeight(params.tile.tointeger(), params.corner.tointeger());
+            break;
+        }
+        case "get_slope": {
+            return AITile.GetSlope(params.tile.tointeger());
+            break;
+        }
+        case "is_buildable": {
+            return AITile.IsBuildable(params.tile.tointeger());
+            break;
+        }
+        case "has_tree_on_tile": {
+            return AITile.HasTreeOnTile(params.tile.tointeger());
+            break;
+        }
+        case "is_sea_tile": {
+            return AITile.IsSeaTile(params.tile.tointeger());
+            break;
+        }
+        case "is_river_tile": {
+            return AITile.IsRiverTile(params.tile.tointeger());
+            break;
+        }
+        case "is_water_tile": {
+            return AITile.IsWaterTile(params.tile.tointeger());
+            break;
+        }
+        case "is_station_tile": {
+            return AITile.IsStationTile(params.tile.tointeger());
+            break;
+        }
+        case "is_demolishable": {
+            return AITile.IsDemolishable(params.tile.tointeger());
+            break;
+        }
+        case "demolish_tile": {
+            return AITile.DemolishTile(params.tile.tointeger());
+            break;
+        }
+        case "raise_tile": {
+            return AITile.RaiseTile(params.tile.tointeger());
+            break;
+        }
+        case "lower_tile": {
+            return AITile.LowerTile(params.tile.tointeger());
+            break;
+        }
+        case "plant_tree": {
+            return AITile.PlantTree(params.tile.tointeger());
+            break;
+        }
     }
-}
