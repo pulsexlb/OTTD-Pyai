@@ -117,7 +117,7 @@ class AI(OpenttdAI):
 connection_setting = ConnectionSetting(
     ip_address="127.0.0.1",  # Server's ip
     port_num=3977,  # Server's admin port number (See it in your openttd.cfg)
-    password="YOUR ADMIN PORT PASSWORD",  # Server's admin port password
+    password="123456",  # Server's admin port password
     connection_name="OtherAIAdmin",  # Connection name, will display in logs
     connection_version="15.3"  # Server's openttd version
 )
